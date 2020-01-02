@@ -9,6 +9,14 @@ session_start();
 // Carrega o usuário
 $usuario = $_SESSION['usuarioUsuario'];
 
+// CONSULTANDO AS CATEGORIAS:
+$sqlCategoria = " SELECT * FROM cadastro_categorias ";
+$queryCategoria = $conn->query($sqlCategoria) or die($mysqli->error);
+
+// CONSULTANDO AS SUB-CATEGORIAS:
+$sqlSubCategoria = " SELECT *, b.txt_categoria FROM cadastro_subcategorias a LEFT JOIN cadastro_categorias b on a.id_categoria = b.id_categoria order by txt_categoria asc, b.id_categoria ";
+$querySubCategoria = $conn->query($sqlSubCategoria) or die($mysqli->error);
+
 ?>
 
 <head>
@@ -18,17 +26,13 @@ $usuario = $_SESSION['usuarioUsuario'];
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap core CSS -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Estilização dos sites feito por mim - Robson -->    
+    <link href="../../css/style_caperon.css" rel="stylesheet">
 
     <link rel="icon" href="../../img/sifrao1.ico">
 
     <title>CAPERON - CATEGORIAS</title>
-
-      <style type="text/css">
-         .corpo_carteira {background-color: white;position: fixed; top: 0%;width: 100%;z-index: 100;}
-         .menu_lat_esq {color: white;list-style-type: none;margin-top: 10px;}
-         .menu_lat_esq li a {margin-left: -20px;}                    
-      </style>
 
       <div class="corpo_carteira" >
         
@@ -137,10 +141,12 @@ $usuario = $_SESSION['usuarioUsuario'];
 
         </div>   
 
-      <div style="position: relative; float: left; margin-top: 20px; margin-left: 40px; background-color: #F5F5DC; width: 1050px; max-height: 700px;">             
+      <div style="position: relative; float: left; margin-top: 20px; margin-left: 40px; background-color: #F5F5DC; width: 1050px; max-height: 700px;">           
 
 
-               <div class="" id="Add_Categoria" style="width: 800px; font-size: 9pt; margin-top: 30px; margin-left: 12%; display: none; " > 
+              <div class="" id="Add_SubCategoria" style="width: 800px; font-size: 9pt; margin-top: 30px; margin-left: 12%; display: none; " >
+
+                  <div class="form-row" > 
 
                     <form method="post" action="financeiro_acao.php">          
                           
@@ -152,40 +158,19 @@ $usuario = $_SESSION['usuarioUsuario'];
                         .formInserirData {width: 120px;height: 30px;margin-right: 10px;border: 0.5px solid #B9B9B9;}
                         </style>
 
-                          <div class="form-row" >
+                          
                                 <div class="">
-                                  <label for="descricao">Categoria</label><br>
-                                  <input type="text" class="formInserirDesc" id="descricao" placeholder="Descrição" value="" required>                    
-                                </div>                                  
-                                <div class="">
-                                    <label for="tipo">Fluxo de Caixa</label><br>
-                                      <select class="formInserir" id="tipo" name="tipo">
-                                          <option selected>Selecione</option>
-                                          <option value="1">Receita Fixa</option>
-                                          <option value="2">Receita Variavel</option>
-                                          <option value="3">Despesa Fixa</option>
-                                          <option value="4">Despesa Variavel</option>                            
-                                      </select>               
-                                </div>
-                                <div class="">
-                                    <label for="categoria">Balanço Patrimonial</label><br>
-                                      <select class="formInserir" id="categoria" name="categoria">
-                                          <option selected>Selecione</option>
-                                          <option value="1">Ativo</option>
-                                          <option value="2">Passivo</option>                                    
-                                      </select>               
-                                </div>
+                                  <label for="categoria">Categoria</label><br>
+                                  <input type="text" class="formInserirDesc" id="categoria" placeholder="Descrição" name="categoria" value="" required>                    
+                                </div> 
+                                
+                                <input type="hidden" name="acao" value="inserir">  
+                                <input type="hidden" name="usuario" value="<?php echo $usuario; ?>">  
+                                <input type="hidden" name="tipo" value="categoria">  
+                                <button class="btn btn-primary" style="height: 35px; margin-top: 23px;" type="submit">Add</button> 
 
+                    </form> 
 
-                                 <button class="btn btn-primary" style="height: 35px; margin-top: 23px;" type="submit">Add</button> 
-
-                          </div> 
-
-                    </form>                    
-
-              </div> 
-
-              <div class="" id="Add_SubCategoria" style="width: 800px; font-size: 9pt; margin-top: 30px; margin-left: 12%; display: none; " > 
 
                     <form method="post" action="financeiro_acao.php">          
                           
@@ -197,41 +182,47 @@ $usuario = $_SESSION['usuarioUsuario'];
                         .formInserirData {width: 120px;height: 30px;margin-right: 10px;border: 0.5px solid #B9B9B9;}
                         </style>
 
-                          <div class="form-row" >
+                       
                                 <div class="">
                                   <label for="categoria">Categoria</label><br>
-                                  <select class="formInserir" id="categoria" name="tipo">
+                                  <select class="formInserir" id="categoria" name="id_categoria">
                                           <option selected>Selecione</option>
-                                          <option value="1">Veiculos</option>
-                                          <option value="2">Obras</option>
-                                          <option value="3">Contador</option>
-                                          <option value="4">Administrativo</option>                            
-                                      </select>                     
+                                    <?php while ($row = $queryCategoria->fetch_array()){ 
+                                        $id_categoria = $row['id_categoria'];
+                                        $categoria = $row['txt_categoria'];
+                                    ?>
+                                          <option value="<?=$id_categoria?>"><?=$categoria?></option>
+                                    <?php } ?>
+                                                                     
+                                  </select>                     
                                 </div>  
                                  <div class="">
                                   <label for="subcategoria">SubCategoria</label><br>
-                                  <input type="text" class="formInserirDesc" id="subcategoria" placeholder="SubCategoria" value="" required>                    
+                                  <input type="text" class="formInserirDesc" id="subcategoria" name="subcategoria" placeholder="Digite uma subcategoria" value="" required>                    
                                 </div>                                  
                                 <div class="">
-                                    <label for="tipo">Fluxo de Caixa</label><br>
-                                      <select class="formInserir" id="tipo" name="tipo">
+                                    <label for="tipo_fc">Fluxo de Caixa</label><br>
+                                      <select class="formInserir" id="tipo_fc" name="tipo_fc">
                                           <option selected>Selecione</option>
-                                          <option value="1">Receita Fixa</option>
-                                          <option value="2">Receita Variavel</option>
-                                          <option value="3">Despesa Fixa</option>
-                                          <option value="4">Despesa Variavel</option>                            
+                                          <option value="RF">Receita Fixa</option>
+                                          <option value="RV">Receita Variavel</option>
+                                          <option value="DF">Despesa Fixa</option>
+                                          <option value="DV">Despesa Variavel</option>                            
                                       </select>               
                                 </div>
                                 <div class="">
-                                    <label for="categoria">Balanço Patrimonial</label><br>
-                                      <select class="formInserir" id="categoria" name="categoria">
+                                    <label for="tipo_bp">Balanço Patrimonial</label><br>
+                                      <select class="formInserir" id="tipo_bp" name="tipo_bp">
                                           <option selected>Selecione</option>
-                                          <option value="1">Ativo</option>
-                                          <option value="2">Passivo</option>                                    
+                                          <option value="A">Ativo</option>
+                                          <option value="P">Passivo</option>
+                                          <option value="PL">Patrimônio Líquido</option>                 
                                       </select>               
                                 </div>
 
-
+                                 <input type="hidden" name="acao" value="inserir">  
+                                 <input type="hidden" name="usuario" value="<?php echo $usuario; ?>">  
+                                 <input type="hidden" name="tipo" value="subcategoria">  
                                  <button class="btn btn-primary" style="height: 35px; margin-top: 23px;" type="submit">Add</button> 
 
                           </div> 
@@ -261,19 +252,11 @@ $usuario = $_SESSION['usuarioUsuario'];
                                 <div>
                                   <label for="id_caixa">Nº</label><br>
                                   <input class="formAlterarN" type="text" class="form-control" id="id_caixa" name="id_caixa" value="" disabled>                   
-                                </div>
-                                <div>
-                                  <label for="dat_entrada">Data</label><br>
-                                  <input class="formAlterarData" type="date" class="form-control" id="dat_entrada" placeholder="Data" value="">                   
-                                </div>
+                                </div>                                
                                 <div>
                                   <label for="descricao">Descrição</label><br>
                                   <input class="formAlterarDesc" type="text" class="form-control" id="descricao" value="">                    
-                                </div>                          
-                                <div>
-                                  <label for="valor">Valor (R$)</label><br>
-                                  <input class="formAlterar" type="number" class="form-control" id="valor" value="" >
-                                </div>
+                                </div> 
                                 <div>
                                     <label for="tipo">Tipo</label><br>                                
                                       <select class="formAlterar" id="tipo" name="tipo">
@@ -358,16 +341,18 @@ $usuario = $_SESSION['usuarioUsuario'];
                       </table>
                       <div class="scrollContainer">
                         <table>
+                          <?php while ($row = $querySubCategoria->fetch_array()) { ?>
                               <tr>                            
-                                <td style="border-left: 1px solid #B9B9B9;" class="col1">Veiculos</td>
-                                <td class="col2">Gasolina</td>
-                                <td class="col3">Despesa Variavel</td>
-                                <td class="col4">Passivo</td>                                  
+                                <td style="border-left: 1px solid #B9B9B9;" class="col1"><?php echo $row['txt_categoria']; ?></td>
+                                <td class="col2"><?php echo $row['txt_subcategoria']; ?></td>
+                                <td class="col3"><?php echo $row['tipo_fc']; ?></td>
+                                <td class="col4"><?php echo $row['tipo_bp']; ?></td>
                                 <td style="border-right: 1px solid #B9B9B9;" class="col5">
                                   <button id="hideshow" title="Alterar" onclick="myFunction_alt()">A</button>
                                   <button id="hideshow" title="Excluir" onclick="alert('Certeza que deseja excluir?')">E</button>
                                 </td>             
                               </tr> 
+                            <?php }?>
                         </table>
                       </div>
 

@@ -25,10 +25,10 @@ $con = $conn->query($consulta) or die($mysql->error);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <!-- Bootstrap core CSS -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">     
+    <!-- Bootstrap core CSS -->
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
     <!-- Estilização dos sites feito por mim - Robson -->    
-    <link href="../../css/style_caperon.css" rel="stylesheet">
+    <link href="../../../css/style_caperon.css" rel="stylesheet">
 
     <link rel="icon" href="../../../img/sifrao1.ico">
 
@@ -106,7 +106,7 @@ $con = $conn->query($consulta) or die($mysql->error);
       
  
         <style type="text/css">
-          .tabContainer1 {width: 1150px; margin-top: 100px; margin-left: 10%; background-color: white; padding: 10px; }
+          .tabContainer1 {width: 1150px; margin-top: 10%; margin-left: 10%; background-color: white; padding: 10px; }
           .tabContainer2 {width: 1100px; margin-top: 10px; margin-left: 1.5%; margin-bottom: 10px; }
           .scrollContainer {max-height: 700px; overflow: auto; margin-top: 0px;}
           .tabela_clientes {width: 1100px; text-align: center;}

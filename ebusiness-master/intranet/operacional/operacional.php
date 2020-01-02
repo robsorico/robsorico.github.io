@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-
 <?php 
 // Inicia sessões 
 session_start(); 
@@ -8,17 +5,20 @@ session_start();
 $usuario = $_SESSION['usuarioUsuario'];
 
 ?>
-       
+
+<!DOCTYPE html>
+<html lang="pt-br">
+ 
 <head>
     <!-- Meta tags Obrigatórias -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+          
     <!-- Bootstrap core CSS -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">    
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">    
     <!-- Estilização dos sites feito por mim - Robson -->    
-    <link href="../css/style_caperon.css" rel="stylesheet">
-
+    <link href="../../css/style_caperon.css" rel="stylesheet"> 
 
     <link rel="icon" href="../../img/sifrao1.ico">
 
@@ -29,7 +29,7 @@ $usuario = $_SESSION['usuarioUsuario'];
 <body>
     
 
-    <div class="corpo_carteira" >
+    <div class="menus" >
         
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark flex-md-nowrap p-1 shadow">
           <img style="margin-left: 0px; height: 35px;" src="../../img/caperon_titulo.png">       
@@ -56,8 +56,6 @@ $usuario = $_SESSION['usuarioUsuario'];
             </form>
           </div>
         </nav>
-
- </div>
 
         <nav class="nav_submenu">          
             <ul>
@@ -94,11 +92,11 @@ $usuario = $_SESSION['usuarioUsuario'];
             </ul>                      
         </nav>
      
-           
+  </div>          
 
 
 
-   <script type="text/javascript" src="../../js/javascript_caperon.js"></script>         
+   <script type="text/javascript" src="../../js/javascript_caperon.js"></script>
 
   </body>
 </html>

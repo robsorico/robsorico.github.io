@@ -18,17 +18,13 @@ $usuario = $_SESSION['usuarioUsuario'];
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap core CSS -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Estilização dos sites feito por mim - Robson -->    
+    <link href="../../css/style_caperon.css" rel="stylesheet">
 
     <link rel="icon" href="../../img/sifrao1.ico">
 
     <title>CAPERON - CONTAS A RECEBER</title>
-
-      <style type="text/css">
-         .corpo_carteira {background-color: white;position: fixed; top: 0%;width: 100%;z-index: 100;}
-         .menu_lat_esq {color: white;list-style-type: none;margin-top: 10px;}
-         .menu_lat_esq li a {margin-left: -20px;}                    
-      </style>
 
       <div class="corpo_carteira" >
         

@@ -37,10 +37,10 @@ $con = $conn->query($consulta) or die($mysqli->error);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <!-- Bootstrap core CSS -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">     
+    <!-- Bootstrap core CSS -->
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
     <!-- Estilização dos sites feito por mim - Robson -->    
-    <link href="../../css/style_caperon.css" rel="stylesheet">
+    <link href="../../../css/style_caperon.css" rel="stylesheet">
 
     <link rel="icon" href="../../../img/sifrao1.ico">
 
@@ -115,7 +115,7 @@ $con = $conn->query($consulta) or die($mysqli->error);
             </ul>                      
   </nav> 
       
-  <div class="corpo_princ" style="margin-top: 130px; background-color: #F5F5DC; width: 1100px; max-height: 820px; margin-left: 10%;" >   
+  <div class="corpo_princ" style="margin-top: 11%; background-color: #F5F5DC; width: 1100px; max-height: 820px; margin-left: 10%;" >   
                         
       
         <div class="corpo_sec" style="width: 950px; padding-top: 20px; margin-left: 70px;" > 

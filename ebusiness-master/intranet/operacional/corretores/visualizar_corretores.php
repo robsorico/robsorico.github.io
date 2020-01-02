@@ -20,10 +20,10 @@ $con = $conn->query($consulta) or die($mysql->error);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <!-- Bootstrap core CSS -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">     
+    <!-- Bootstrap core CSS -->
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
     <!-- Estilização dos sites feito por mim - Robson -->    
-    <link href="../../css/style_caperon.css" rel="stylesheet">
+    <link href="../../../css/style_caperon.css" rel="stylesheet">
 
     <link rel="icon" href="../../../img/sifrao1.ico">
 

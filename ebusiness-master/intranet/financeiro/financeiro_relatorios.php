@@ -18,29 +18,13 @@ $usuario = $_SESSION['usuarioUsuario'];
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap core CSS -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Estilização dos sites feito por mim - Robson -->    
+    <link href="../../css/style_caperon.css" rel="stylesheet">
 
     <link rel="icon" href="../../img/sifrao1.ico">
 
     <title>CAPERON - FINANCEIRO-RELATÓRIOS</title>
-
-      <style type="text/css">
-         .corpo_carteira {background-color: white;position: fixed; top: 0%;width: 100%;z-index: 100;}
-         .menu_lat_esq {color: white;list-style-type: none;margin-top: 10px;}
-         .menu_lat_esq li a {margin-left: -20px;} 
-
-         .nav_crud {
-        text-align: right;
-      }
-
-      .crud li {
-        display: inline-block;
-        padding: 2px;
-        color: green;
-        font-weight: bold;
-        font-size: 10pt;
-      }                   
-      </style>
 
       <div class="corpo_carteira" >
         
@@ -161,7 +145,7 @@ $usuario = $_SESSION['usuarioUsuario'];
 
 <div style="position: relative; float: left; margin-top: 20px; margin-left: 40px; background-color: #F5F5DC; width: 1050px; max-height: 700px;">             
 
-      <div class="container" style="width: 600px; margin-top: 120px; "> 
+      <div class="container" style="width: 600px; margin-top: 50px; "> 
 
             <nav class="nav_crud">
                 <ul class="crud" style="list-style-type: none; ">
@@ -271,7 +255,7 @@ $usuario = $_SESSION['usuarioUsuario'];
         </div>  
 
 
-   <div class="container" style="width: 1200px; margin-top: 120px;">  
+   <div class="container" style="width: 1000px; margin-top: 120px;">  
 
       <nav class="nav_crud">
           <ul class="crud" style="list-style-type: none; ">
