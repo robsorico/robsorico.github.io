@@ -7,9 +7,9 @@
 	// RECEBENDO DADOS DA PAGINA CATEGORIAS/SUBCATEGORIAS:
 	$tipo 				= $_REQUEST['tipo'];
 	$acao 				= $_REQUEST['acao'];
-	$usuario 			= $_REQUEST['usuario'];
-	$id_categoria   	= isset($_REQUEST['id_categoria']) ? $_REQUEST['id_categoria'] : "";
+	$usuario 			= $_REQUEST['usuario'];	
 	$txt_categoria 		= isset($_REQUEST['categoria']) ? $_REQUEST['categoria'] : "";
+	$id_categoria   	= isset($_REQUEST['id_categoria']) ? $_REQUEST['id_categoria'] : "";
 	$txt_subcategoria 	= $_REQUEST['subcategoria'];
 	$tipo_fc		 	= $_REQUEST['tipo_fc'];
 	$tipo_bp		 	= $_REQUEST['tipo_bp'];
@@ -92,25 +92,24 @@
 				
 				if ($txt_subcateg <> null or $txt_subcateg <> '') {
 
-					echo '<pre>';	
-					echo var_dump($tipo);
-					echo var_dump($acao);
-					echo var_dump($usuario);
-					echo var_dump($id_categoria);
-					echo var_dump($txt_categoria);
-					echo var_dump($txt_subcategoria);
-					echo var_dump($tipo_fc);
-					echo var_dump($tipo_bp);
-					echo 'entrei aqui.';
-					echo '</pre>';
-					exit(0);
-
 					echo "<script language='javascrit' type='text/javascript'>
 					alert('Esta subcategoria já existe!');window.location.href='financeiro_categorias.php';</script> ";
 	
 				} else {
 
-					$sql = mysqli_query($conn, " INSERT INTO `cadastro_subcategorias`(`id_subcategoria`, `dat_entrada`, `txt_subcategoria`, `id_categoria`, `tipo_fc`, `tipo_bp`, `dat_alteracao`, `usuario`) VALUES (null, CURRENT_DATE, '$txt_subcategoria', '$id_categoria', '$tipo_fc', '$tipo_bp', '$usuario') "); 
+					/*echo '<pre>';	
+					echo var_dump($tipo);
+					echo var_dump($acao);
+					echo var_dump($usuario);
+					echo var_dump($id_categoria);					
+					echo var_dump($txt_subcategoria);
+					echo var_dump($tipo_fc);
+					echo var_dump($tipo_bp);
+					echo 'entrei aqui.';
+					echo '</pre>';
+					exit(0);*/
+
+					$sql = mysqli_query($conn, " INSERT INTO `cadastro_subcategorias`(`id_subcategoria`, `dat_entrada`, `txt_subcategoria`, `id_categoria`, `tipo_fc`, `tipo_bp`, `dat_alteracao`, `usuario`) VALUES (null, CURRENT_DATE,'$txt_subcategoria',$id_categoria,'$tipo_fc','$tipo_bp',null,'$usuario') "); 
 
 					if ($sql) {
 						echo " <script language='javascript' type='text/javascript'>

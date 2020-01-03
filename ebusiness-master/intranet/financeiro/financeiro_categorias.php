@@ -14,7 +14,7 @@ $sqlCategoria = " SELECT * FROM cadastro_categorias ";
 $queryCategoria = $conn->query($sqlCategoria) or die($mysqli->error);
 
 // CONSULTANDO AS SUB-CATEGORIAS:
-$sqlSubCategoria = " SELECT *, b.txt_categoria FROM cadastro_subcategorias a LEFT JOIN cadastro_categorias b on a.id_categoria = b.id_categoria order by txt_categoria asc, b.id_categoria ";
+$sqlSubCategoria = " SELECT * FROM cadastro_categorias a LEFT JOIN cadastro_subcategorias b on a.id_categoria = b.id_categoria order by txt_categoria asc, b.id_categoria ";
 $querySubCategoria = $conn->query($sqlSubCategoria) or die($mysqli->error);
 
 ?>
@@ -141,93 +141,82 @@ $querySubCategoria = $conn->query($sqlSubCategoria) or die($mysqli->error);
 
         </div>   
 
-      <div style="position: relative; float: left; margin-top: 20px; margin-left: 40px; background-color: #F5F5DC; width: 1050px; max-height: 700px;">           
+      <div style="position: relative; float: left; margin-top: 20px; margin-left: 40px; background-color: #F5F5DC; width: 1050px; max-height: 700px;">             
 
 
-              <div class="" id="Add_SubCategoria" style="width: 800px; font-size: 9pt; margin-top: 30px; margin-left: 12%; display: none; " >
-
-                  <div class="form-row" > 
-
-                    <form method="post" action="financeiro_acao.php">          
-                          
-                        <input type="hidden" name="categoria_add" value="true">
+        <div class="" id="adicionar" style="width: 800px; font-size: 9pt; margin-top: 30px; margin-left: 2%; display: none; " >
+                    
+                    <form method="post" action="financeiro_acao.php"> 
                           
                         <style type="text/css">
                         .formInserir {width: 130px; height: 30px; margin-right: 10px;} 
-                        .formInserirDesc {width: 180px;height: 30px;margin-right: 10px;}
+                        .formInserirDesc {width: 198px;height: 29.5px;margin-right: 10px;}
                         .formInserirData {width: 120px;height: 30px;margin-right: 10px;border: 0.5px solid #B9B9B9;}
                         </style>
-
-                          
-                                <div class="">
-                                  <label for="categoria">Categoria</label><br>
-                                  <input type="text" class="formInserirDesc" id="categoria" placeholder="Descrição" name="categoria" value="" required>                    
-                                </div> 
-                                
-                                <input type="hidden" name="acao" value="inserir">  
-                                <input type="hidden" name="usuario" value="<?php echo $usuario; ?>">  
-                                <input type="hidden" name="tipo" value="categoria">  
-                                <button class="btn btn-primary" style="height: 35px; margin-top: 23px;" type="submit">Add</button> 
-
+                      <div class="form-row" >                          
+                          <input type="hidden" name="tipo" value="categoria">
+                          <input type="hidden" name="acao" value="inserir">  
+                          <input type="hidden" name="usuario" value="<?php echo $usuario; ?>">   
+                          <div class="form-group col-md-3">
+                            <label for="categoria">Categoria</label><br>
+                            <input type="text" class="formInserirDesc" id="categoria" placeholder="Digite uma categoria" name="categoria" value="" required>                    
+                          </div>      
+                          <div class="form-group col-md-2">   
+                            <button class="btn btn-primary" style="height: 35px; margin-top: 23px;" type="submit">Add</button> 
+                          </div> 
+                      </div>
                     </form> 
 
-
-                    <form method="post" action="financeiro_acao.php">          
-                          
-                        <input type="hidden" name="subcategoria_add" value="true">
-                          
-                        <style type="text/css">
-                        .formInserir {width: 130px; height: 30px; margin-right: 10px;} 
-                        .formInserirDesc {width: 180px;height: 30px;margin-right: 10px;}
-                        .formInserirData {width: 120px;height: 30px;margin-right: 10px;border: 0.5px solid #B9B9B9;}
-                        </style>
-
-                       
-                                <div class="">
-                                  <label for="categoria">Categoria</label><br>
-                                  <select class="formInserir" id="categoria" name="id_categoria">
-                                          <option selected>Selecione</option>
-                                    <?php while ($row = $queryCategoria->fetch_array()){ 
-                                        $id_categoria = $row['id_categoria'];
-                                        $categoria = $row['txt_categoria'];
-                                    ?>
-                                          <option value="<?=$id_categoria?>"><?=$categoria?></option>
-                                    <?php } ?>
-                                                                     
-                                  </select>                     
-                                </div>  
-                                 <div class="">
-                                  <label for="subcategoria">SubCategoria</label><br>
-                                  <input type="text" class="formInserirDesc" id="subcategoria" name="subcategoria" placeholder="Digite uma subcategoria" value="" required>                    
-                                </div>                                  
-                                <div class="">
-                                    <label for="tipo_fc">Fluxo de Caixa</label><br>
-                                      <select class="formInserir" id="tipo_fc" name="tipo_fc">
-                                          <option selected>Selecione</option>
-                                          <option value="RF">Receita Fixa</option>
-                                          <option value="RV">Receita Variavel</option>
-                                          <option value="DF">Despesa Fixa</option>
-                                          <option value="DV">Despesa Variavel</option>                            
-                                      </select>               
-                                </div>
-                                <div class="">
-                                    <label for="tipo_bp">Balanço Patrimonial</label><br>
-                                      <select class="formInserir" id="tipo_bp" name="tipo_bp">
-                                          <option selected>Selecione</option>
-                                          <option value="A">Ativo</option>
-                                          <option value="P">Passivo</option>
-                                          <option value="PL">Patrimônio Líquido</option>                 
-                                      </select>               
-                                </div>
-
-                                 <input type="hidden" name="acao" value="inserir">  
-                                 <input type="hidden" name="usuario" value="<?php echo $usuario; ?>">  
-                                 <input type="hidden" name="tipo" value="subcategoria">  
-                                 <button class="btn btn-primary" style="height: 35px; margin-top: 23px;" type="submit">Add</button> 
-
-                          </div> 
-
-                    </form>                    
+              
+                    <form method="post" action="financeiro_acao.php"> 
+                        
+                        <div class="form-row" >                          
+                            <input type="hidden" name="tipo" value="subcategoria">
+                            <input type="hidden" name="acao" value="inserir">  
+                            <input type="hidden" name="usuario" value="<?php echo $usuario; ?>">  
+                              
+                            <div class="form-group col-md-2">
+                              <label for="categoria">Categoria</label><br>
+                              <select class="formInserir" id="categoria" name="id_categoria">
+                                      <option selected>Selecione</option>
+                                <?php while ($row = $queryCategoria->fetch_array()){ 
+                                    $id_categoria = $row['id_categoria'];
+                                    $categoria = $row['txt_categoria'];
+                                ?>
+                                      <option value="<?=$id_categoria?>"><?=$categoria?></option>
+                                <?php } ?>
+                                                                 
+                              </select>                     
+                            </div>  
+                            <div class="form-group col-md-3">
+                              <label for="subcategoria">SubCategoria</label><br>
+                              <input type="text" class="formInserirDesc" id="subcategoria" name="subcategoria" placeholder="Digite uma subcategoria" value="" required>
+                            </div>                                  
+                            <div class="form-group col-md-2">
+                                <label for="tipo_fc">Fluxo de Caixa</label><br>
+                                  <select class="formInserir" id="tipo_fc" name="tipo_fc">
+                                      <option selected>Selecione</option>
+                                      <option value="Receita Fixa">Receita Fixa</option>
+                                      <option value="Receita Variavel">Receita Variavel</option>
+                                      <option value="Despesa Fixa">Despesa Fixa</option>
+                                      <option value="Despesa Variavel">Despesa Variavel</option>                            
+                                  </select>               
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="tipo_bp">Balanço Patrimonial</label><br>
+                                  <select class="formInserir" id="tipo_bp" name="tipo_bp">
+                                      <option selected>Selecione</option>
+                                      <option value="Ativo">Ativo</option>
+                                      <option value="Passivo">Passivo</option>
+                                      <option value="Patrimônio Líquido">Patrimônio Líquido</option>                 
+                                  </select>               
+                            </div>
+                            <div class="form-group col-md-2">
+                             <button class="btn btn-primary" style="height: 35px; margin-top: 23px;" type="submit">Add</button>
+                            </div>  
+                        </div> 
+                        
+                    </form> 
 
               </div> 
 
@@ -294,16 +283,12 @@ $querySubCategoria = $conn->query($sqlSubCategoria) or die($mysqli->error);
 
                     <div class="container-fluid" style="background-color: #1C1C1C; padding: 5px; color: white; height: 65px;">
                        
-                       <div style="position: relative; float: left; margin-left: 180px; margin-top: 10px;">
+                       <div style="position: relative; float: left; margin-left: 40%; margin-top: 10px;">
                          <h4 style=""><b>LISTA</b></h4>      
                        </div>
                        
-                       <div class="" style="margin-top: 10px; margin-left: 440px; margin-right: 30px; position: relative; float: left;" >
-                          <button class="btn blue" id="hideshow" onclick="myFunction_Cat()">Add Categoria</button>
-                       </div> 
-
-                       <div style="margin-top: 10px; font-size: 8pt; margin-right: 0px;">                         
-                          <button class="btn blue" id="hideshow" onclick="myFunction_SubCat()">Add SubCategoria</button>
+                       <div style="margin-left: 88%; margin-top: 10px; font-size: 8pt; margin-right: 0px;">                         
+                          <button class="btn blue" id="hideshow" onclick="myFunction_add()">Adicionar</button>
                        </div>                                            
                     
                     </div>
@@ -369,10 +354,9 @@ $querySubCategoria = $conn->query($sqlSubCategoria) or die($mysqli->error);
 
     <script type="text/javascript">
 
-        function myFunction_Cat() {
-            var x = document.getElementById('Add_Categoria');
-            var y = document.getElementById('alterar_caixa');
-            var z = document.getElementById('Add_SubCategoria');
+        function myFunction_add() {
+            var x = document.getElementById('adicionar');
+            var y = document.getElementById('alterar');            
 
                 if (x.style.display === 'none') {
                     x.style.display = 'block';
@@ -383,24 +367,9 @@ $querySubCategoria = $conn->query($sqlSubCategoria) or die($mysqli->error);
                 }
 
             }
-        function myFunction_SubCat() {
-            var x = document.getElementById('Add_SubCategoria');
-            var y = document.getElementById('alterar_caixa');
-            var z = document.getElementById('Add_Categoria');
-
-                if (x.style.display === 'none') {
-                    x.style.display = 'block';
-                    y.style.display = 'none';
-                    z.style.display = 'none';
-                } else {
-                    x.style.display = 'none';
-                }
-
-            }    
-
         function myFunction_alt() {
-            var x = document.getElementById('alterar_caixa');
-            var y = document.getElementById('inserir_caixa');
+            var x = document.getElementById('alterar');
+            var y = document.getElementById('adicionar');
                 if (x.style.display === 'none') {
                     x.style.display = 'block';
                     y.style.display = 'none';
