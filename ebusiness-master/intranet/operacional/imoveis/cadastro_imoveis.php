@@ -110,25 +110,25 @@ function get_endereco($cep_auto){
                   </ul>
               </li>         
             </ul>                      
-  </nav> 
+  </nav>
 
-  
 <?php 
   
+  // RECEBENDO DADOS DA PRÓPRIA PÁGINA:
   $tipo = isset($_POST['tipo']) ? $_POST['tipo'] : "" ; 
   $status = isset($_POST['status']) ? $_POST['status'] : "" ;
 
 
-if ($tipo == '' and $status == '') { 
+if ($tipo == '') {
 
 ?>
 
-  <div class="corpo_princ" style="margin-top: 11%; background-color: #F5F5DC; width: 43%; max-height: 19%; margin-left: 25%; margin-bottom: 3%;" >   
+<div class="corpo_princ" style="margin-top: 11%; background-color: #F5F5DC; width: 43%; max-height: 19%; margin-left: 30%; margin-bottom: 3%;" >   
                         
       
-        <div class="corpo_sec" style="width: 95%; padding-top: 20px; margin-left: 3%;" > 
+    <div class="corpo_sec" style="width: 95%; padding-top: 20px; margin-left: 3%;" > 
 
-          <form method="POST" action="cadastro_imoveis.php" name="">
+          <form method="POST" action="cadastro_imoveis.php" id="form" name="">
         
               <h5 style="text-align: left; margin-top: -10px; margin-bottom: 10px; border-bottom: 0.5px solid #B9B9B9;">IMÓVEL</h5>
 
@@ -136,7 +136,7 @@ if ($tipo == '' and $status == '') {
 
                   <div class="form-group col-md-4">
                     <label for="tipo">TIPO</label>
-                      <select class="custom-select mr-sm-2" id="tipo" name="tipo" required>
+                      <select class="custom-select mr-sm-2" id="tipo" onchange="func_lote()" name="tipo" required>
                         <option selected></option>
                         <option value="APTO">APTO</option>
                         <option value="CASA">CASA</option>
@@ -144,30 +144,31 @@ if ($tipo == '' and $status == '') {
                       </select>
                   </div>
 
-                  <div class="form-group col-md-6">
+                  <div class="form-group col-md-6" id="div_status_tipo" style="display: none;">
                     <label for="status">STATUS TIPO</label>
-                      <select class="custom-select mr-sm-2" id="status" name="status" required>
-                        <option selected></option>
+                      <select class="custom-select mr-sm-2" id="status" name="status">
                         <option value="AQUISIÇÃO">AQUISIÇÃO</option>
-                        <option value="CONSTRUÇÃO">CONSTRUÇÃO</option>                                                         
+                        <option value="CONSTRUÇÃO">CONSTRUÇÃO</option>      
                       </select>
                   </div>                   
 
-              <button type="submit" class="btn btn-primary" name="enviar" style="background-color: green; border-color: green; width: 10%; height: 5%; margin-top: 5.5%; margin-left: 2%;">Ok</button>
+              <button type="submit" class="btn btn-primary" id="btn_enviar" name="enviar" style="background-color: green; border-color: green; width: 10%; height: 5%; margin-top: 5.5%; margin-left: 2%;">Ok</button>
                </div>
-            
-             
       
           </form>        
       
     </div> 
 
 </div>
+  
 
-<?php } elseif ($tipo == 'LOTE') { ?>
+<?php 
 
+}
+
+if ($tipo <> '') { ?>
       
-  <div class="corpo_princ" style="margin-top: 11%; background-color: #F5F5DC; width: 1100px; max-height: 98%; margin-left: 10%; margin-bottom: 3%; " >   
+  <div class="corpo_princ" style="margin-top: 11%; background-color: #F5F5DC; width: 1100px; max-height: 98%; margin-left: 10%; margin-bottom: 3%; ">   
                         
       
         <div class="corpo_sec" style="width: 950px; padding-top: 20px; margin-left: 70px;" > 
@@ -181,18 +182,82 @@ if ($tipo == '' and $status == '') {
                   <div class="form-group col-md-2">
                     <label for="tipo">TIPO</label>
                       <select class="custom-select mr-sm-2" id="tipo" name="tipo" disabled>
-                        <option selected><?php echo $tipo ?></option>          
+                        <option selected><?php echo $tipo ?></option>
+                        <input type="hidden" name="tipo" value="">          
                       </select>
                   </div>            
+      
+      <?php if ($tipo <> 'LOTE') { ?>
+                    
+                    <div class="form-group col-md-4">
+                      <label for="status">STATUS TIPO</label>
+                        <select class="custom-select mr-sm-2" id="status" name="status" disabled>
+                          <option selected><?php echo $status ?></option>                                
+                        </select>
+                    </div>
 
-                  <div class="form-group col-md-4">
-                    <label for="status">STATUS TIPO</label>
-                      <select class="custom-select mr-sm-2" id="status" name="status" disabled>
-                        <option selected><?php echo $status ?></option>                                
-                      </select>
-                  </div>   
+      <?php } ?>   
 
-               </div>   
+               </div>
+
+
+  <?php 
+
+  if ($tipo <> 'LOTE' and $status == 'CONSTRUÇÃO') { 
+
+  // CONSULTA DOS LOTES PARA APRESENTAR O ENDEREÇO ONDE SERA FEITA A OBRA
+  $consulta = " SELECT * FROM cadastro_imoveis ";
+  $imoveis = $conn->query($consulta) or die($mysqli->error);
+
+  $consulta = " SELECT * FROM cadastro_obras ";
+  $obras = $conn->query($consulta) or die($mysqli->error);
+
+
+  ?>  
+
+                    <div class="form-row" style="margin-top: 2%; border-bottom: 0.5px solid #B9B9B9; padding-bottom: 1%;">
+
+                      <div class="form-group col-md-9">
+                        <label for="end">Endereço Completo</label>                    
+                        <select class="custom-select mr-sm-2" id="end" name="end" required>
+                                <option selected></option>                  
+                            <?php while ($dado = $imoveis->fetch_array()) 
+
+                            { ?>
+                                <option value="<?php echo $dado['id_imoveis'];?>"><?php echo 'LOTE Nº '.$dado["num_end"].' - '.$dado["txt_end"].' '.$dado["txt_compl"].' '.$dado["txt_bairro"].' '.$dado["txt_cidade"].'-'.$dado["txt_uf"]; ?></option>
+                            <?php } ?>                                                            
+                        </select>                        
+                      </div>
+
+                      <div class="form-group col-md-1">
+                        <label for="obra">Nº Casa</label>                                                             
+                        <input type="text" class="form-control" name="nu_casa" value="">    
+                      </div>     
+
+                      <div class="form-group col-md-1">
+                        <label for="obra">Nº Obra</label>                        
+                        <select class="custom-select mr-sm-2" id="obra" name="obra" disabled>
+                                <option selected></option>                  
+                            <?php while ($dado = $obras->fetch_array()) 
+
+                            { ?>
+                                <option value="<?php echo $dado['id_obras'];?>"><?php echo $dado["nu_obra"];?></option>
+                            <?php } ?>                                                            
+                        </select> 
+                      </div>                      
+
+                      <input type="hidden" name="status_lote" value="CONSTRUIDO">
+
+                      <!-- <div class="form-group col-md-2">
+                        <label for="status_lote">Status do Lote</label>                    
+                        <select class="custom-select mr-sm-2" id="status_lote" name="status_lote" required>
+                            <option selected></option>                            
+                            <option value="CONSTRUIDO">CONSTRUÇÃO</option>         
+                        </select>                        
+                      </div> -->
+                    </div>
+
+<?php } else { ?>   
 
               <div class="form-row" style="margin-top: 3%;">
                   
@@ -234,215 +299,7 @@ if ($tipo == '' and $status == '') {
                       </select>
                   </div>
                </div>   
-
-
-              <h6 style="text-align: left; margin-top: 20px; margin-bottom: 10px;" ><u>CARTÓRIO</u></h6>  
-
-               <div class="form-row" > 
-                <div class="form-group col-md-2">
-                  <label for="matricula">Matrícula</label>
-                  <input type="text" class="form-control" id="matricula" name="matricula" required>
-                </div>
-                <div class="form-group col-md-1">
-                  <label for="livro">Livro</label>
-                  <input type="text" class="form-control" id="livro" name="livro">
-                </div>
-                <div class="form-group col-md-1">
-                  <label for="folha">Folha</label>
-                  <input type="text" class="form-control" id="folha" name="folha">
-                </div>
-                <div class="form-group col-md-3">
-                  <label for="dat_reg">Data do Registro</label>
-                  <input type="date" class="form-control" id="dat_reg" name="dat_reg" required>
-                </div> 
-                <div class="form-group col-md-5">
-                  <label for="nome_cart">Nome Cartório</label>
-                  <input type="text" class="form-control" id="nome_cart" name="nome_cart">
-                </div>                 
-              </div>
-
-              <h6 style="text-align: left; margin-top: 20px; margin-bottom: 10px;" ><u>PREFEITURA</u></h6> 
-                
-               <div class="form-row" >   
-                 <div class="form-group col-md-2">
-                    <label for="iptu">Nº IPTU</label>
-                    <input type="text" class="form-control" id="iptu" name="iptu">
-                  </div>
-               </div>
-
-                <h5 style="text-align: left; margin-top: 20px; margin-bottom: 10px; border-bottom: 0.5px solid #B9B9B9;">SITUAÇÃO</h5>
-
-              
-                <div class="form-row" >
-
-                    <div class="form-group col-md-3">
-                      <label for="nu_agua">Nº ÁGUA</label>
-                      <input type="text" class="form-control" id="nu_agua" name="nu_agua">
-                    </div> 
-                    <div class="form-group col-md-5">
-                      <label for="cond_agua">CONDIÇÃO</label>
-                      <select style="font-size: 12px; font-weight: bold;" class="custom-select mr-sm-2" id="cond_agua" name="cond_agua" >
-                            <option selected></option>
-                            <option value="LIGADA">LIGADA</option>
-                            <option value="DESLIGADA">DESLIGADA</option>           
-                          </select>
-                    </div>     
-
-                </div>
-
-                <div class="form-row" >
-
-                    <div class="form-group col-md-3">
-                      <label for="nu_energ">Nº ENERGIA</label>
-                      <input type="text" class="form-control" id="nu_energ" name="nu_energ">
-                    </div> 
-                    <div class="form-group col-md-5">
-                      <label for="cond_energ">CONDIÇÃO</label>
-                      <select style="font-size: 12px; font-weight: bold;" class="custom-select mr-sm-2" id="cond_energ" name="cond_energ" >
-                            <option selected></option>
-                            <option value="LIGADA">LIGADA</option>
-                            <option value="DESLIGADA">DESLIGADA</option>                                
-                          </select>
-                    </div>     
-
-                </div>
-   
-              
-              <input type="hidden" name="imoveis_acao" value="ins">
-
-              <button type="submit" class="btn btn-primary" name="cadastrar" style="margin-left: 800px; background-color: green; border-color: green; width: 150px; margin-bottom: 50px;">Cadastrar</button>
-      
-          </form>        
-      
-    </div> 
-
-</div>
-
-<?php } else { ?>
-
-
-   <div class="corpo_princ" style="margin-top: 11%; background-color: #F5F5DC; width: 1100px; max-height: 98%; margin-left: 10%; margin-bottom: 3%; " >   
-                        
-      
-        <div class="corpo_sec" style="width: 950px; padding-top: 20px; margin-left: 70px;" > 
-
-          <form method="POST" action="../../../conexoes/conexao_imoveis.php" name="form_imoveis">
-        
-              <h5 style="text-align: left; margin-top: -10px; margin-bottom: 10px; border-bottom: 0.5px solid #B9B9B9;">IMÓVEL</h5>
-
-               <div class="form-row" style="border-bottom: 0.5px solid #B9B9B9; padding-bottom: 1%;">
-
-                  <div class="form-group col-md-2">
-                    <label for="tipo">TIPO</label>
-                      <select class="custom-select mr-sm-2" id="tipo" name="tipo" disabled>
-                        <option selected><?php echo $tipo ?></option>          
-                      </select>
-                  </div>            
-
-                  <div class="form-group col-md-4">
-                    <label for="status">STATUS TIPO</label>
-                      <select class="custom-select mr-sm-2" id="status" name="status" disabled>
-                        <option selected><?php echo $status ?></option>                                
-                      </select>
-                  </div>   
-
-               </div>   
-
-              <?php if ($status == 'CONSTRUÇÃO') { 
-
-  // CONSULTA DOS LOTES PARA APRESENTAR O ENDEREÇO ONDE SERA FEITA A OBRA
-$consulta = " SELECT * FROM cadastro_imoveis ";
-$imoveis = $conn->query($consulta) or die($mysqli->error);
-
-$consulta = " SELECT * FROM cadastro_obras ";
-$obras = $conn->query($consulta) or die($mysqli->error);
-
-
-                ?>  
-
-                    <div class="form-row" style="margin-top: 2%; border-bottom: 0.5px solid #B9B9B9; padding-bottom: 1%;">
-
-                      <div class="form-group col-md-9">
-                        <label for="end">Endereço Completo</label>                    
-                        <select class="custom-select mr-sm-2" id="end" name="end" required>
-                                <option selected></option>                  
-                            <?php while ($dado = $imoveis->fetch_array()) 
-
-                            { ?>
-                                <option value="<?php echo $dado['id_imoveis'];?>"><?php echo 'LOTE Nº '.$dado["num_end"].' - '.$dado["txt_end"].' '.$dado["txt_compl"].' '.$dado["txt_bairro"].' '.$dado["txt_cidade"].'-'.$dado["txt_uf"]; ?></option>
-                            <?php } ?>                                                            
-                        </select>                        
-                      </div>
-
-                      <div class="form-group col-md-1">
-                        <label for="obra">Nº Obra</label>                        
-                        <select class="custom-select mr-sm-2" id="obra" name="obra" disabled>
-                                <option selected></option>                  
-                            <?php while ($dado = $obras->fetch_array()) 
-
-                            { ?>
-                                <option value="<?php echo $dado['id_obras'];?>"><?php echo $dado["nu_obra"];?></option>
-                            <?php } ?>                                                            
-                        </select> 
-                      </div>                      
-
-                      <div class="form-group col-md-2">
-                        <label for="status_lote">Status do Lote</label>                    
-                        <select class="custom-select mr-sm-2" id="status_lote" name="status_lote" required>
-                            <option selected></option>                            
-                            <option value="CONSTRUIDO">CONSTRUÇÃO</option>         
-                        </select>
-                        
-                      </div>
-                    </div>
-                    
-
-              <?php } elseif ($status == 'AQUISIÇÃO') { ?>
-              
-
-                    <div class="form-row">
-                        
-                        <div class="form-group col-md-2">
-                          <label for="cep">CEP</label>
-                          <input type="text" onchange="get_endereco(document.form_imoveis.cep.value)" class="form-control" id="cep" name="cep" >
-                        </div>
-                        <div class="form-group col-md-6">
-                          <label for="endereco">Endereço</label>
-                          <input type="text" class="form-control" id="endereco" name="endereco" >
-                        </div>
-                         <div class="form-group col-md-2">
-                          <label for="num_end">Nº</label>
-                          <input type="text" class="form-control" id="num_end" name="num_end" >
-                        </div>
-                        
-                    </div>    
-
-                    <div class="form-row">  
-                      <div class="form-group col-md-5">
-                        <label for="compl">Complemento</label>
-                        <input type="text" class="form-control" id="compl" name="compl_end" >
-                      </div>
-                       <div class="form-group col-md-3">
-                        <label for="bairro">Bairro</label>
-                        <input type="text" class="form-control" id="bairro" name="bairro" >
-                      </div>
-                      <div class="form-group col-md-3">
-                        <label for="cidade">Cidade</label>
-                        <input type="text" class="form-control" id="cidade" name="cidade" >
-                      </div>
-                       <div class="form-group col-md-1">
-                        <label for="uf">UF</label>
-                          <select style="font-size: 11px; font-weight: bold;" class="custom-select mr-sm-2" id="uf" name="uf" >
-                            <option selected></option>
-                            <option value="DF">DF</option>
-                            <option value="GO">GO</option>
-                            <option value="MG">MG</option>                                  
-                          </select>
-                      </div>
-                   </div>
-
-              <?php } ?>
-
+<?php } ?>
 
               <h6 style="text-align: left; margin-top: 20px; margin-bottom: 10px;" ><u>CARTÓRIO</u></h6>  
 
@@ -478,7 +335,9 @@ $obras = $conn->query($consulta) or die($mysqli->error);
                   </div>
                </div>
 
-              <div class="form-row" > 
+  <?php if ($tipo <> 'LOTE') { ?>
+               
+               <div class="form-row" > 
                 
                   <div class="form-group col-md-2">
                     <label for="nu_hab">Nº Habite-se</label>
@@ -496,29 +355,13 @@ $obras = $conn->query($consulta) or die($mysqli->error);
                     <label for="crea">CREA</label>
                     <input type="text" class="form-control" id="crea" name="crea">
                   </div>                 
-              </div> 
+              </div>
 
+  <?php } ?>  
 
                 <h5 style="text-align: left; margin-top: 20px; margin-bottom: 10px; border-bottom: 0.5px solid #B9B9B9;">SITUAÇÃO</h5>
 
-                <!-- <div class="form-row" >
-
-                    <div class="form-group col-md-3">
-                        <label for="status">STATUS</label>
-                          <select style="font-size: 12px; font-weight: bold;" class="custom-select mr-sm-2" id="status" name="status" >
-                            <option selected></option>
-                            <option value="VENDIDO">VENDIDO</option>
-                            <option value="BLOQUEADO JUSTIÇA">BLOQUEADO JUSTIÇA</option>
-                            <option value="DESMEMBRADO">DESMEMBRADO</option>
-                            <option value="UNIFICADO">UNIFICADO</option>
-                            <option value="ATIVO">ATIVO</option>
-                            <option value="EM CONSTRUÇÃO">EM CONSTRUÇÃO</option>
-                            <option value="CONSTRUIDO">CONSTRUIDO</option>                                  
-                          </select>
-                      </div>
-
-                </div> -->
-
+              
                 <div class="form-row" >
 
                     <div class="form-group col-md-3">
@@ -564,10 +407,22 @@ $obras = $conn->query($consulta) or die($mysqli->error);
 
 </div>
 
-
-<?php } ?>  
-    
+<?php } ?>
 
 </body>
 
+<script type="text/javascript">
+  function func_lote(){
+    var x = document.querySelector('#tipo');
+    var y = document.querySelector('#div_status_tipo');
+    if (x.value == 'APTO' || x.value == 'CASA') {
+        y.style.display = 'block';        
+    } else {
+        y.style.display = 'none';        
+    }
+  }
+</script>
+
 </html>
+
+
