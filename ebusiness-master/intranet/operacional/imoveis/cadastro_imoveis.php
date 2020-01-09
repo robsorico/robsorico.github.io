@@ -183,20 +183,31 @@ if ($tipo <> '') { ?>
                     <label for="tipo">TIPO</label>
                       <select class="custom-select mr-sm-2" id="tipo" name="tipo" disabled>
                         <option selected><?php echo $tipo ?></option>
-                        <input type="hidden" name="tipo" value="">          
+                        <input type="hidden" name="tipo" value="<?php echo $tipo ?>">          
                       </select>
                   </div>            
       
       <?php if ($tipo <> 'LOTE') { ?>
                     
-                    <div class="form-group col-md-4">
-                      <label for="status">STATUS TIPO</label>
-                        <select class="custom-select mr-sm-2" id="status" name="status" disabled>
-                          <option selected><?php echo $status ?></option>                                
-                        </select>
-                    </div>
+                  <div class="form-group col-md-4">
+                    <label for="status">STATUS TIPO</label>
+                      <select class="custom-select mr-sm-2" id="status" name="status" disabled>
+                        <option selected><?php echo $status ?></option>                                
+                      </select>
+                  </div>
+                  <input type="hidden" name="status" value="<?php echo $status ?>">
 
-      <?php } ?>   
+      <?php } else { ?>
+
+                  <div class="form-group col-md-4">
+                    <label for="status">STATUS TIPO</label>
+                      <select class="custom-select mr-sm-2" id="status" name="status" disabled>
+                        <option selected>AQUISIÇÃO</option>                                
+                      </select>
+                  </div>
+                  <input type="hidden" name="status" value="AQUISIÇÃO">
+
+      <?php } ?>        
 
                </div>
 
@@ -206,56 +217,37 @@ if ($tipo <> '') { ?>
   if ($tipo <> 'LOTE' and $status == 'CONSTRUÇÃO') { 
 
   // CONSULTA DOS LOTES PARA APRESENTAR O ENDEREÇO ONDE SERA FEITA A OBRA
-  $consulta = " SELECT * FROM cadastro_imoveis ";
+  $consulta = " SELECT b.id_obras, b.nu_obra, a.id_imoveis, a.num_end, a.txt_end, 
+      a.txt_compl, a.txt_bairro, a.txt_cidade, a.txt_uf
+      FROM `cadastro_imoveis` a,
+      `cadastro_obras` b
+      WHERE a.id_imoveis=b.id_imoveis ";
   $imoveis = $conn->query($consulta) or die($mysqli->error);
-
-  $consulta = " SELECT * FROM cadastro_obras ";
-  $obras = $conn->query($consulta) or die($mysqli->error);
-
 
   ?>  
 
-                    <div class="form-row" style="margin-top: 2%; border-bottom: 0.5px solid #B9B9B9; padding-bottom: 1%;">
+                <div class="form-row" style="margin-top: 2%; border-bottom: 0.5px solid #B9B9B9; padding-bottom: 1%;">
 
-                      <div class="form-group col-md-9">
-                        <label for="end">Endereço Completo</label>                    
-                        <select class="custom-select mr-sm-2" id="end" name="end" required>
-                                <option selected></option>                  
-                            <?php while ($dado = $imoveis->fetch_array()) 
+                  <div class="form-group col-md-9">
+                    <label for="id_imoveis_lote">Nº Obra - Endereço Completo</label>                    
+                    <select class="custom-select mr-sm-2" id="id_imoveis_lote" name="id_imoveis_lote" required>
+                        <option selected></option>                  
+                        <?php while ($dado = $imoveis->fetch_array())
 
-                            { ?>
-                                <option value="<?php echo $dado['id_imoveis'];?>"><?php echo 'LOTE Nº '.$dado["num_end"].' - '.$dado["txt_end"].' '.$dado["txt_compl"].' '.$dado["txt_bairro"].' '.$dado["txt_cidade"].'-'.$dado["txt_uf"]; ?></option>
-                            <?php } ?>                                                            
-                        </select>                        
-                      </div>
+                        { ?>
+                        <option value="<?php echo $dado['id_imoveis'];?>"><?php echo 'OBRA Nº '.$dado["nu_obra"].' - LOTE Nº '.$dado["num_end"].' - '.$dado["txt_end"].' '.$dado["txt_compl"].' '.$dado["txt_bairro"].' '.$dado["txt_cidade"].'-'.$dado["txt_uf"]; ?></option>
+                        <?php } ?>                                                            
+                    </select>                        
+                  </div>
 
-                      <div class="form-group col-md-1">
-                        <label for="obra">Nº Casa</label>                                                             
-                        <input type="text" class="form-control" name="nu_casa" value="">    
-                      </div>     
+                  <input type="hidden" name="status_lote" value="CONSTRUÇÃO">
 
-                      <div class="form-group col-md-1">
-                        <label for="obra">Nº Obra</label>                        
-                        <select class="custom-select mr-sm-2" id="obra" name="obra" disabled>
-                                <option selected></option>                  
-                            <?php while ($dado = $obras->fetch_array()) 
+                  <div class="form-group col-md-1">
+                    <label for="num_end">Nº Imov</label>                                                             
+                    <input type="text" class="form-control" name="num_end" id="num_end" value="">    
+                  </div>                                  
 
-                            { ?>
-                                <option value="<?php echo $dado['id_obras'];?>"><?php echo $dado["nu_obra"];?></option>
-                            <?php } ?>                                                            
-                        </select> 
-                      </div>                      
-
-                      <input type="hidden" name="status_lote" value="CONSTRUIDO">
-
-                      <!-- <div class="form-group col-md-2">
-                        <label for="status_lote">Status do Lote</label>                    
-                        <select class="custom-select mr-sm-2" id="status_lote" name="status_lote" required>
-                            <option selected></option>                            
-                            <option value="CONSTRUIDO">CONSTRUÇÃO</option>         
-                        </select>                        
-                      </div> -->
-                    </div>
+                </div>
 
 <?php } else { ?>   
 
@@ -266,8 +258,8 @@ if ($tipo <> '') { ?>
                     <input type="text" onchange="get_endereco(document.form_imoveis.cep.value)" class="form-control" id="cep" name="cep" >
                   </div>
                   <div class="form-group col-md-6">
-                    <label for="endereco">Endereço</label>
-                    <input type="text" class="form-control" id="endereco" name="endereco" >
+                    <label for="end">Endereço</label>
+                    <input type="text" class="form-control" id="end" name="end" >
                   </div>
                    <div class="form-group col-md-2">
                     <label for="num_end">Nº</label>
