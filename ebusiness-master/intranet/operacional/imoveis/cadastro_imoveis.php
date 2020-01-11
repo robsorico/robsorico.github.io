@@ -147,8 +147,8 @@ if ($tipo == '') {
                   <div class="form-group col-md-6" id="div_status_tipo" style="display: none;">
                     <label for="status">STATUS TIPO</label>
                       <select class="custom-select mr-sm-2" id="status" name="status">
-                        <option value="AQUISIÇÃO">AQUISIÇÃO</option>
-                        <option value="CONSTRUÇÃO">CONSTRUÇÃO</option>      
+                        <option value="1">ADQUIRIDO</option>
+                        <option value="2">CONSTRUIDO</option>      
                       </select>
                   </div>                   
 
@@ -192,7 +192,12 @@ if ($tipo <> '') { ?>
                   <div class="form-group col-md-4">
                     <label for="status">STATUS TIPO</label>
                       <select class="custom-select mr-sm-2" id="status" name="status" disabled>
-                        <option selected><?php echo $status ?></option>                                
+                        <?php if ($status == 1) {
+                          $txt_status = 'ADQUIRIDO';
+                        } else if ($status == 2) {
+                          $txt_status = 'CONSTRUIDO';
+                        }?>
+                        <option selected><?php echo $txt_status ?></option>                                
                       </select>
                   </div>
                   <input type="hidden" name="status" value="<?php echo $status ?>">
@@ -202,10 +207,10 @@ if ($tipo <> '') { ?>
                   <div class="form-group col-md-4">
                     <label for="status">STATUS TIPO</label>
                       <select class="custom-select mr-sm-2" id="status" name="status" disabled>
-                        <option selected>AQUISIÇÃO</option>                                
+                        <option selected>ADQUIRIDO</option>                                
                       </select>
                   </div>
-                  <input type="hidden" name="status" value="AQUISIÇÃO">
+                  <input type="hidden" name="status" value=1>
 
       <?php } ?>        
 
@@ -214,14 +219,15 @@ if ($tipo <> '') { ?>
 
   <?php 
 
-  if ($tipo <> 'LOTE' and $status == 'CONSTRUÇÃO') { 
+  if ($tipo <> 'LOTE' and $status == '2') { 
 
-  // CONSULTA DOS LOTES PARA APRESENTAR O ENDEREÇO ONDE SERA FEITA A OBRA
+  // CONSULTA DOS LOTES PARA APRESENTAR O ENDEREÇO E A OBRA:
   $consulta = " SELECT b.id_obras, b.nu_obra, a.id_imoveis, a.num_end, a.txt_end, 
-      a.txt_compl, a.txt_bairro, a.txt_cidade, a.txt_uf
-      FROM `cadastro_imoveis` a,
+      a.txt_compl, a.txt_bairro, a.txt_cidade, a.txt_uf, a.txt_tipo, a.nu_status_imoveis
+      FROM 
+      `cadastro_imoveis` a,
       `cadastro_obras` b
-      WHERE a.id_imoveis=b.id_imoveis ";
+      WHERE a.id_obras=b.id_obras and a.txt_tipo='LOTE' and a.nu_status_imoveis=2 ";
   $imoveis = $conn->query($consulta) or die($mysqli->error);
 
   ?>  
@@ -238,9 +244,7 @@ if ($tipo <> '') { ?>
                         <option value="<?php echo $dado['id_imoveis'];?>"><?php echo 'OBRA Nº '.$dado["nu_obra"].' - LOTE Nº '.$dado["num_end"].' - '.$dado["txt_end"].' '.$dado["txt_compl"].' '.$dado["txt_bairro"].' '.$dado["txt_cidade"].'-'.$dado["txt_uf"]; ?></option>
                         <?php } ?>                                                            
                     </select>                        
-                  </div>
-
-                  <input type="hidden" name="status_lote" value="CONSTRUÇÃO">
+                  </div>                                  
 
                   <div class="form-group col-md-1">
                     <label for="num_end">Nº Imov</label>                                                             
@@ -390,6 +394,7 @@ if ($tipo <> '') { ?>
    
               
               <input type="hidden" name="imoveis_acao" value="ins">
+              <input type="hidden" name="usuario" value="<?php echo $usuario ?>">
 
               <button type="submit" class="btn btn-primary" name="cadastrar" style="margin-left: 800px; background-color: green; border-color: green; width: 150px; margin-bottom: 50px;">Cadastrar</button>
       

@@ -22,7 +22,7 @@ $usuario = $_SESSION['usuarioUsuario'];
 //echo "Rua: $endereço->logradouro";
 
 // CONSULTA DOS LOTES PARA APRESENTAR O ENDEREÇO ONDE SERA FEITA A OBRA
-$consulta = " SELECT * FROM cadastro_imoveis ";
+$consulta = " SELECT * FROM cadastro_imoveis WHERE txt_tipo='LOTE' AND nu_status_imoveis=1 ";
 $con = $conn->query($consulta) or die($mysqli->error);
 
 
@@ -126,13 +126,13 @@ $con = $conn->query($consulta) or die($mysqli->error);
   
               <div class="form-row">
                   <div class="form-group col-md-1">
-                    <label for="obra">Nº Obra</label>
-                    <input type="text" class="form-control" id="obra"  name="obra" required>
+                    <label for="nu_obra">Nº Obra</label>
+                    <input type="text" class="form-control" id="nu_obra"  name="nu_obra" required>
                   </div>
 
                   <div class="form-group col-md-9">
-                    <label for="end">Endereço Completo</label>                    
-                    <select class="custom-select mr-sm-2" id="end" name="end" required>
+                    <label for="id_imoveis_lote">Endereço Completo</label>                    
+                    <select class="custom-select mr-sm-2" id="id_imoveis_lote" name="id_imoveis_lote" required>
                             <option selected></option>                  
                         <?php while ($dado = $con->fetch_array()) 
 
@@ -143,15 +143,9 @@ $con = $conn->query($consulta) or die($mysqli->error);
                     
                   </div>
 
-                  <div class="form-group col-md-2">
-                    <label for="status_obra">Status</label>                    
-                    <select class="custom-select mr-sm-2" id="status_obra" name="status_obra" required>
-                        <option selected></option>
-                        <option value="INICIADA">INICIADA</option>
-                        <option value="CONCLUIDA">CONCLUIDA</option>         
-                    </select>
-                    
-                  </div>
+                  <input type="hidden" name="nu_status_obras" value=1>
+                  <input type="hidden" name="nu_status_imoveis_lote" value=2>
+                  
               </div>
 
               <div class="form-row" > 
@@ -236,6 +230,7 @@ $con = $conn->query($consulta) or die($mysqli->error);
         </div><br>
               
               <input type="hidden" name="obras_acao" value="ins">
+              <input type="hidden" name="usuario" value="<?php echo $usuario?>">
 
               <button type="submit" class="btn btn-primary" name="cadastrar" style="margin-left: 850px; background-color: green; border-color: green; width: 150px; margin-bottom: 50px;">Cadastrar</button>
       
